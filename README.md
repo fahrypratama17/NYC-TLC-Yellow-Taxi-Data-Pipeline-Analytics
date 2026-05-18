@@ -142,23 +142,3 @@ nyc-tlc-data-pipeline/
 ```
 
 ---
-
-## How each rubric criterion is satisfied
-
-| Rubric item | Points | Where |
-| --- | --- | --- |
-| Goals & boundaries | 5 | This README + `docs/ARCHITECTURE.md` |
-| Architecture & role split | 5 | Diagram above + team table |
-| Ingestion logic | 10 | `src/nyc_tlc/ingest/` |
-| Automation / scheduling | 10 | `prefect_flows/main_flow.py` (Prefect flow) |
-| Anomaly handling | 10 | `src/nyc_tlc/clean/run.py` (range filters + type guards) |
-| Transformations | 10 | `clean/run.py` (derived cols) + `dbt_project/models/` |
-| Storage mechanism | 10 | Medallion lake under `data/` + DuckDB warehouse |
-| Schema design | 10 | dbt marts: `dim_zone`, `fct_zone_features`, `fct_hourly_demand`, `fct_flow_od` |
-| Map usage | 10 | `dashboard/pages/1_Geospatial.py` (Folium choropleth + Pydeck 3D) |
-| Interactivity | 10 | Filters on every dashboard page |
-| Answers the goal | 10 | Multi-page narrative + ML insights |
-| **Bonus: external data** | +10 | Open-Meteo weather joined to every trip hour |
-| **Bonus: machine learning** | +10 | K-Means vs GMM clustering, winner by silhouette score |
-
-**Target: 120 / 100**
