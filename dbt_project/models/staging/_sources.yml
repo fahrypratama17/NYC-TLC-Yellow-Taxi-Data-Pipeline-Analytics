@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: silver
+    description: "Cleaned data produced by the Python clean stage."
+    meta:
+      external_location: "{{ var('silver_dir') }}"
+    tables:
+      - name: yellow_trips
+        description: "Cleaned Yellow Taxi trips (1 row per trip)."
+        external:
+          location: "{{ var('silver_dir') }}/yellow_trips.parquet"
+      - name: weather_hourly
+        description: "Hourly weather for NYC midtown from Open-Meteo."
+        external:
+          location: "{{ var('silver_dir') }}/weather_hourly.parquet"
