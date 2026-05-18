@@ -1,0 +1,30 @@
+name: "nyc_tlc"
+version: "0.1.0"
+config-version: 2
+
+profile: "nyc_tlc"
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+  - "logs"
+
+models:
+  nyc_tlc:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: table
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+
+vars:
+  silver_dir: "{{ env_var('DBT_SILVER_DIR', '../data/silver') }}"
+  marts_dir: "{{ env_var('DBT_MARTS_DIR', '../data/marts') }}"
