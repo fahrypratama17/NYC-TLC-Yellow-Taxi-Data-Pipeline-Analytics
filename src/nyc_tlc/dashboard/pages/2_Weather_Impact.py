@@ -7,7 +7,6 @@
 * 245150200111061  RICHARD SAMUEL HATANE
 
 Weather impact — how conditions and temperature relate to demand.
-Weather impact analysis — taxi demand vs weather conditions.
 """
 
 from __future__ import annotations
@@ -28,20 +27,12 @@ from nyc_tlc.dashboard.data import load_hourly_demand
 from nyc_tlc.dashboard.theme import WEATHER_COLOURS, style
 
 st.set_page_config(page_title="Weather Impact · NYC TLC", page_icon="🌧️", layout="wide")
-st.set_page_config(
-    page_title="Weather Impact · NYC TLC",
-    page_icon="🌦️",
-    layout="wide",
-)
-
 inject_css()
 sidebar_brand()
 
 page_header(
     "Weather Impact on Demand",
     "How rain, snow, and temperature relate to how many taxis New Yorkers hail.",
-    "Weather Impact Analysis",
-    "Understanding how weather conditions influence NYC taxi demand.",
 )
 
 df = load_hourly_demand()
@@ -88,16 +79,6 @@ cards(
 section(
     "Demand by weather condition",
     "Average trips per hour under each sky condition.",
-    "Weather vs Taxi Demand",
-    "Taxi trips compared across different weather conditions.",
-)
-
-# Sample dataset
-weather_df = pd.DataFrame(
-    {
-        "Weather": ["Sunny", "Rainy", "Snowy", "Cloudy"],
-        "Trips": [520000, 430000, 210000, 390000],
-    }
 )
 order = by_cat.sort_values("trips", ascending=False)
 fig_cat = px.bar(
@@ -106,41 +87,20 @@ fig_cat = px.bar(
     y="trips",
     color="weather_category",
     color_discrete_map=WEATHER_COLOURS,
-
-fig = px.bar(
-    weather_df,
-    x="Weather",
-    y="Trips",
-    color="Trips",
-    color_continuous_scale=["#A9C5DD", "#1F4E79"],
-    text="Trips",
 )
 fig_cat.update_layout(xaxis_title=None, yaxis_title="Average trips per hour", showlegend=False)
 st.plotly_chart(style(fig_cat, 320), width="stretch")
-
-fig.update_layout(
-    xaxis_title="Weather Condition",
-    yaxis_title="Total Trips",
-    coloraxis_showscale=False,
-)
-
-st.plotly_chart(fig, width="stretch")
-
 insight(
     f"Demand is highest in the rain ({_delta('rain')} vs clear weather) — when "
     "it pours, New Yorkers swap walking and transit for a taxi. These are raw "
     "averages; the weather integration also shows up in the zone clustering "
     "features — zones with high rain/snow demand ratios form their own segment."
-    "Taxi demand is highest during sunny weather and decreases "
-    "significantly during snow conditions."
 )
 
 # ── Demand by temperature ───────────────────────────────
 section(
     "Demand by temperature",
     "Average trips per hour across temperature bands.",
-    "Key Observations",
-    "Summary of weather-related travel patterns.",
 )
 _temp_colours = {
     "< 0°C": "#2C5F8A",
@@ -155,21 +115,10 @@ fig_temp = px.bar(
     y="trips",
     color="temp_band",
     color_discrete_map=_temp_colours,
-
-st.markdown(
-    """
-- Sunny weather generates the highest taxi demand.
-- Rain increases short-distance taxi usage.
-- Snow significantly reduces mobility across NYC.
-- Cloudy conditions maintain moderate trip activity.
-"""
 )
 fig_temp.update_layout(xaxis_title=None, yaxis_title="Average trips per hour", showlegend=False)
 st.plotly_chart(style(fig_temp, 320), width="stretch")
-
 insight(
     f"Demand is strongest in the {busiest_band} band — comfortable, mild "
     "weather coincides with the busiest periods of city activity."
-    "Weather patterns strongly influence transportation behaviour, "
-    "especially during extreme conditions such as snowstorms."
 )

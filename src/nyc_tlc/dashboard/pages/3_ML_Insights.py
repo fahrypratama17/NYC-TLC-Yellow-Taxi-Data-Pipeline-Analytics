@@ -7,7 +7,6 @@
 * 245150200111061  RICHARD SAMUEL HATANE
 
 ML insights — zone segments by behavioural clustering.
-Machine learning insights — zone segmentation profiles.
 """
 
 from __future__ import annotations
@@ -30,11 +29,6 @@ from nyc_tlc.ml.profiles import (
     _DEFAULT_DESCRIPTION,
     ARCHETYPE_ACTIONS,
     ARCHETYPE_DESCRIPTIONS,
-
-st.set_page_config(
-    page_title="ML Insights · NYC TLC",
-    page_icon="🤖",
-    layout="wide",
 )
 
 st.set_page_config(page_title="ML Insights · NYC TLC", page_icon="🧭", layout="wide")
@@ -42,8 +36,6 @@ inject_css()
 sidebar_brand()
 
 page_header(
-    "Machine Learning Insights",
-    "Cluster and segmentation analysis of NYC taxi zones.",
     "Zone Segments",
     "How the city's taxi zones group together by operational behaviour.",
 )
@@ -58,24 +50,11 @@ PERIODS = {
 
 # ── Zone segments ───────────────────────────────────────
 section(
-    "Zone Segment Profiles",
-    "Machine learning clustering groups taxi zones by behaviour.",
     "Zone segments",
     "Taxi zones grouped by how their trips behave — each segment is a "
     "different kind of place to operate in.",
 )
 
-cluster_df = pd.DataFrame(
-    {
-        "Cluster": [
-            "High Demand",
-            "Residential",
-            "Airport",
-            "Weather Sensitive",
-        ],
-        "Zones": [48, 92, 12, 37],
-    }
-)
 profiles = load_cluster_profiles()
 if profiles.empty:
     st.warning("Run `make train` to produce the segments first.")
@@ -101,24 +80,6 @@ else:
             st.markdown(ARCHETYPE_DESCRIPTIONS.get(name, _DEFAULT_DESCRIPTION))
             st.markdown(f"**Recommended focus —** {ARCHETYPE_ACTIONS.get(name, _DEFAULT_ACTION)}")
 
-fig = px.pie(
-    cluster_df,
-    names="Cluster",
-    values="Zones",
-    hole=0.4,
-)
-
-st.plotly_chart(fig, width="stretch")
-
-insight(
-    "Most NYC taxi zones fall into residential behaviour clusters, "
-    "while airport zones represent a smaller but high-value segment."
-)
-
-section(
-    "ML Interpretation",
-    "Insights generated from clustering and segmentation.",
-)
     # Evidence — collapsed by default; the basis for the segment names.
     with st.expander("How these segments were defined — the evidence"):
         st.caption(
@@ -167,17 +128,3 @@ section(
             "K-Means and GMM are compared; the winner is chosen by silhouette score."
         )
 
-st.markdown(
-    """
-### Key Findings
-- High-demand zones are concentrated in Manhattan.
-- Residential zones dominate outer borough regions.
-- Airport zones generate fewer trips but higher fares.
-- Weather-sensitive zones show strong demand fluctuations.
-"""
-)
-
-insight(
-    "Machine learning segmentation helps identify operational patterns "
-    "and supports demand forecasting strategies."
-)
