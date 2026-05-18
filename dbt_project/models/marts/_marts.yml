@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: dim_zone
+    description: "Canonical list of NYC TLC taxi zones (1..265)."
+    columns:
+      - name: zone_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fct_zone_features
+    description: "Per-zone feature vector used as input to clustering."
+    columns:
+      - name: zone_id
+        tests: [not_null, unique]
+      - name: total_trips
+        tests: [not_null]
+      - name: avg_fare
+        tests: [not_null]
+
+  - name: fct_hourly_demand
+    description: "Citywide hourly demand panel for forecasting."
+    columns:
+      - name: ts_hour
+        tests: [not_null, unique]
+      - name: trips
+        tests: [not_null]
+
+  - name: fct_flow_od
+    description: "Aggregated origin → destination flows."
+    columns:
+      - name: origin_zone_id
+        tests: [not_null]
+      - name: destination_zone_id
+        tests: [not_null]
